@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+/*
+采用带头结点的单链表
+*/
+typedef struct node{
+	int sid; //学号
+	char sname[20]; //名字
+	int score[3];   //记录三门成绩
+	struct node *next;
+}*ListNode,Node;
+ListNode head;
+int opt;
+int score[3];
+int sid;
+char sname[20];
+
+ListNode Create(){ //创建一个单链表的头结点
+    ListNode head=(ListNode)malloc(sizeof(Node));
+    head->next=NULL;
+    return head;
+}
+
+void Ins(ListNode head,int sid,char *sname,int score[]){ //在以head为头结点的单链表中插入学生信息
+	ListNode q=(ListNode)malloc(sizeof(Node));
+	q->sid=sid;
+	strcpy(q->sname,sname);
+	for(int i=0;i<3;++i) q->score[i]=score[i];
+	q->next=head->next;
+	head->next=q;
+}
+void ShowList(ListNode head){ //展示全部的学生信息
+    ListNode p=head;
+    while(p->next!=NULL){
+        p=p->next;
+        printf("%d %s ",p->sid,p->sname);
+        for(int i=0;i<3;++i) printf("%d ",p->score[i]);
+        printf("\n");
+    }
+}
+
+ListNode Search(ListNode head,int sid){
+    ListNode ret=NULL;
+    while(head->next){
+        head=head->next;
+        if(head->sid==sid) ret=head;
+    }
+    return ret;
+}
+
+
+void Display(){ //展示系统功能
+    printf("请选择一个操作:\n");
+    printf("1:浏览每个学生的信息\n");
+    printf("2:学号查询某个学生的基本信息\n");
+    printf("3:添加学生信息\n");
+    printf("4:删除一个学生的信息\n");
+    printf("5:退出系统\n");
+    printf("您的选择为:");
+}
+
+void Del(ListNode head,ListNode Delp){
+    while(1){
+        if(head->next==Delp){
+            head->next=head->next->next;
+            return ;
+        }
+        head=head->next;
+    }
+}
+
+
+
+int main(){
+    head=Create();
+    while(1){
+        Display();
+        scanf("%d",&opt);
+        if(opt==1){
+            printf("各学生信息如下:\n");
+            ShowList(head);
+            puts(""); puts("");
+        }
+        else if(opt==2){
+            printf("请输入要查询的学生的SID:");
+            scanf("%d",&sid);
+            ListNode p=Search(head,sid);
+            if(p==NULL){
+                printf("不存在该学生！\n");
+            }
+            else{
+                printf("该学生信息为:");
+                printf("%d %s ",p->sid,p->sname);
+                for(int i=0;i<3;++i) printf("%d ",p->score[i]);
+                printf("\n");
+            }
+            puts(""); puts("");
+        }
+        else if(opt==3){
+            printf("请输入要添加的学生信息（学号 姓名 三门成绩）:");
+            scanf("%d %s",&sid,sname);
+            for(int i=0;i<3;++i) scanf("%d",&score[i]);
+            Ins(head,sid,sname,score);
+            printf("操作完毕");
+            puts(""); puts("");
+        }
+        else if(opt==4){
+            printf("请输入要删除的学生的SID:");
+            scanf("%d",&sid);
+            ListNode p=Search(head,sid);
+            if(p==NULL){
+                printf("不存在该学生！\n");
+            }
+            else{
+                Del(head,p);
+                printf("删除完毕");
+                printf("\n");
+            }
+            puts(""); puts("");
+        }
+        else{
+                break;
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
