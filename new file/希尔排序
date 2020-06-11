@@ -1,0 +1,31 @@
+#include <cstdio>
+int n; int k;
+int a[100005];
+void swap(int *a,int *b){
+	int t=(*a);
+	(*a)=(*b);
+	(*b)=t;
+}
+void ShellSort(int *a,int n){
+	for(int d=n-(n%2==0);d>=1;d-=2){
+		for(int i=1+d;i<=n;++i){
+			if(a[i]<a[i-d]){
+				a[0]=a[i];
+				int j=i-d;
+				while(j>0&&a[0]<a[j]){ 
+					a[j+d]=a[j];
+					j-=d;
+				}
+				a[j+d]=a[0];
+			}
+		}
+	}	
+}
+int main(){
+	printf("n="); scanf("%d",&n);
+	printf("a[]="); for(int i=1;i<=n;++i) scanf("%d",a+i);
+	printf("k="); scanf("%d",&k);
+	ShellSort(a,n);
+	printf("the %dth smallest element of these n integers is: %d\n",k,a[k]);
+	return 0;
+}
