@@ -1,0 +1,25 @@
+#include <cstdio>
+int n; int k;
+int a[100005];
+
+void swap(int *a,int *b){
+	int t=(*a);
+	(*a)=(*b);
+	(*b)=t;
+}
+
+void BubbleSort(int *a,int n){
+	int turns=n;
+	while(turns--){
+		for(int i=1;i<n;++i) if(a[i]>a[i+1]) swap(&a[i],&a[i+1]);
+	}
+}
+
+int main(){
+	printf("n="); scanf("%d",&n);
+	printf("a[]="); for(int i=1;i<=n;++i) scanf("%d",a+i);
+	printf("k="); scanf("%d",&k);
+	BubbleSort(a,n);
+	printf("the kth smallest element of these n integers is: %d\n",a[k]);
+	return 0;
+}
