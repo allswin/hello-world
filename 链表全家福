@@ -1,0 +1,170 @@
+#include <stdio.h>
+#include <stdlib.h>
+/*
+采用带头结点的单链表
+*/
+typedef struct node{
+	int data;
+	struct node *next;
+}*ListNode,Node;
+int n1; ListNode head1,head2,head3,head4;
+
+ListNode Create(){ //创建一个单链表的头结点
+    ListNode head=(ListNode)malloc(sizeof(Node));
+    head->next=NULL;
+    return head;
+}
+
+void Ins(ListNode head,int x){ //在以head为头结点的单链表中插入x
+	ListNode q=(ListNode)malloc(sizeof(Node));
+	q->data=x;
+	q->next=head->next;
+	head->next=q;
+}
+void ShowList(ListNode head){
+    ListNode p=head->next;
+    printf("%d",p->data);
+    while(p->next!=NULL){
+        p=p->next;
+        printf("->%d",p->data);
+    }
+    printf("\n");
+}
+void Reverse(ListNode head){ //实现对以head为头结点的单链表的逆置
+    ListNode p=head->next;
+    ListNode pre=NULL; //pre 记录p之前的第一个真实结点
+    ListNode lst=p; //lst记录最后一个真实结点
+    while(p!=NULL){
+        lst=p;
+        ListNode nex=p->next;
+        p->next=pre;
+        pre=p;
+        p=nex;
+    }
+    head->next=lst;
+}
+ListNode MergeDescending(ListNode a,ListNode b){ //将a、b非递减有序单链表合并成一个非递减链表
+    //返回合并结果的头结点指针
+    ListNode head=(ListNode)malloc(sizeof(Node));
+    head->next=NULL;
+    ListNode tail=head;
+    a=a->next; b=b->next;
+    while(a&&b){
+        if(a->data>b->data){ //把a结点插入到
+            ListNode nex=a->next;
+            tail->next=a;
+            a->next=NULL;
+            tail=a;
+            a=nex;
+        }
+        else{
+            ListNode nex=b->next;
+            tail->next=b;
+            b->next=NULL;
+            tail=b;
+            b=nex;
+        }
+    }
+    while(a!=NULL){
+        ListNode nex=a->next;
+        tail->next=a;
+        a->next=NULL;
+        tail=a;
+        a=nex;
+    }
+    while(b!=NULL){
+        ListNode nex=b->next;
+        tail->next=b;
+        b->next=NULL;
+        tail=b;
+        b=nex;
+    }
+    return head;
+}
+ListNode MergeAscending(ListNode a,ListNode b){ //将a、b非递减有序单链表合并成一个非递减链表
+    //返回合并结果的头结点指针
+    ListNode head=(ListNode)malloc(sizeof(Node));
+    head->next=NULL;
+    ListNode tail=head;
+    a=a->next; b=b->next;
+    while(a&&b){
+        if(a->data<b->data){ //把a结点插入到
+            ListNode nex=a->next;
+            tail->next=a;
+            a->next=NULL;
+            tail=a;
+            a=nex;
+        }
+        else{
+            ListNode nex=b->next;
+            tail->next=b;
+            b->next=NULL;
+            tail=b;
+            b=nex;
+        }
+    }
+    while(a!=NULL){
+        ListNode nex=a->next;
+        tail->next=a;
+        a->next=NULL;
+        tail=a;
+        a=nex;
+    }
+    while(b!=NULL){
+        ListNode nex=b->next;
+        tail->next=b;
+        b->next=NULL;
+        tail=b;
+        b=nex;
+    }
+    return head;
+}
+
+
+
+
+int main(){
+	printf("请创建一个单链表:\n");
+	head1=Create();
+	printf("请输入单链表的结点数:");  scanf("%d",&n1);
+	printf("请输入%d个数:",n1);
+	for(int i=1;i<=n1;++i){
+		int x; scanf("%d",&x);
+		Ins(head1,x);
+	}
+	printf("每次从单链表首部插入上述元素，得到的初始单链表如下:\n");
+	ShowList(head1);
+	Reverse(head1);
+	printf("将上述的单链表逆置以后，得到的单链表如下:\n");
+	ShowList(head1);
+
+	printf("非递增链表A如下:");
+	head2=Create(); Ins(head2,2); Ins(head2,4); Ins(head2,5);
+	ShowList(head2);
+	printf("非递增链表B如下:");
+	head3=Create(); Ins(head3,1); Ins(head3,3); Ins(head3,6);
+	ShowList(head3);
+    printf("将非递增链表A和非递增链表B合并成非递增链表C如下:");
+	head4=MergeDescending(head2,head3);
+	ShowList(head4);
+
+	printf("非递减链表D如下:");
+	head2=Create(); Ins(head2,5); Ins(head2,4); Ins(head2,2);
+	ShowList(head2);
+	printf("非递减链表E如下:");
+	head3=Create(); Ins(head3,6); Ins(head3,3); Ins(head3,1);
+	ShowList(head3);
+    printf("将非递减链表D和非递减链表E合并成非递减链表F如下:");
+	head4=MergeAscending(head2,head3);
+	ShowList(head4);
+
+}
+
+
+
+
+
+
+
+
+
