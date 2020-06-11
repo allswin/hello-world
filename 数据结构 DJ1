@@ -1,0 +1,90 @@
+#include <stdio.h>
+#define N 105
+#define top 0x3f3f3f3f
+int n; int m; int s; int t;
+typedef struct node{
+    int mat[N][N];
+    int VertexNum;
+    void init(){
+        for(int i=0;i<N;++i){
+            for(int j=0;j<N;++j){
+                mat[i][j]=top;
+            }
+        }
+        for(int i=0;i<N;++i) mat[i][i]=0;
+    }
+
+}Graph;
+Graph g;
+
+void CreateGraph(Graph *g){ //构建有向图的函数
+    g->init();
+    g->VertexNum=6;
+    g->mat[0][2]=5;  g->mat[0][1]=50; g->mat[2][3]=3;
+    g->mat[2][4]=19; g->mat[2][5]=7;  g->mat[5][1]=5;
+    g->mat[5][4]=11;
+}
+
+
+int gt[N]; int pre[N]; int vis[N];
+void DijkStra(Graph g,int s){
+    int n=g.VertexNum;
+    for(int i=0;i<n;++i) gt[i]=top;
+    for(int i=0;i<n;++i) gt[i]=g.mat[s][i];
+    for(int i=0;i<n;++i) vis[i]=0,pre[i]=s;
+    vis[s]=true;
+    for(int i=2;i<=n;++i){
+        int mi=0,mn=top;
+        for(int j=0;j<n;++j) if(!vis[j]&&mn>=gt[j]){
+            mn=gt[j];
+            mi=j;
+        }
+        vis[mi]=true;
+        for(int j=0;j<n;++j) if(!vis[j]&&gt[mi]+g.mat[mi][j]<gt[j]){
+            gt[j]=gt[mi]+g.mat[mi][j];
+            pre[j]=mi;
+        }
+    }
+}
+
+void RoutePrint(int s,int t){
+    if(s==t){
+        printf("%d",t);
+        return ;
+    }
+    RoutePrint(s,pre[t]);
+    printf("->%d",t);
+}
+
+
+
+int main(){
+    CreateGraph(&g); //创建图
+    while(1){
+        printf("请输入起点和终点（输入-1 -1结束）:");
+        scanf("%d %d",&s,&t);
+        if(s==-1&&t==-1) break;
+        DijkStra(g,s);
+        if(gt[t]==top) printf("从%d不可达%d\n",s,t);
+        else{
+            printf("最短路径为:"); RoutePrint(s,t); puts("");
+            printf("最短路径长度为:%d\n",gt[t]);
+        }
+        puts(""); puts("");
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
